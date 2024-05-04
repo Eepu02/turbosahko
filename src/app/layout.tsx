@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { fingridFetch } from "@/utils/fetch";
 
 import { Inter } from "next/font/google";
 
@@ -13,14 +14,19 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const health = await fingridFetch("/health");
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>{children}</body>
+      <body className={`font-sans ${inter.variable}`}>
+        <header>Turbosähkö</header>
+        <main></main>
+        <footer>{health.ok ? <p>API is up!</p> : <p>API is down!</p>}</footer>
+      </body>
     </html>
   );
 }
