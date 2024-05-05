@@ -24,7 +24,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <header>Turbosähkö</header>
-        <main></main>
+        <main>{children}</main>
         <footer>{health.ok ? <p>API is up!</p> : <p>API is down!</p>}</footer>
       </body>
     </html>
