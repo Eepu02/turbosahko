@@ -1,3 +1,12 @@
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 import { fingridFetch } from "@/utils/fetch";
 import { logger } from "@/utils/logger";
 import { dataSetModel } from "@/utils/validate";
@@ -35,6 +44,13 @@ export default async function HomePage() {
           </div>
         ))}
       </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Tuulisähkö</CardTitle>
+          <CardDescription>Reaaliaikainen tuulisähkön tuotanto</CardDescription>
+        </CardHeader>
+        <CardContent>Hello world</CardContent>
+      </Card>
     </div>
   );
 }
