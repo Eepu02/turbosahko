@@ -1,16 +1,7 @@
+import { RealtimeDataCard } from "@/components/datacard/realtime-data-card";
 import { RefreshButton } from "@/components/refresh-button";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-
-import { fingridFetch, getDataSet } from "@/utils/fetch";
+import { SingleDataCard } from "@/components/datacard/single-data-card";
+import { fingridFetch } from "@/utils/fetch";
 import { logger } from "@/utils/logger";
 import { dataSetModel } from "@/utils/validate";
 
@@ -23,61 +14,43 @@ export default async function HomePage() {
   const tomorrowAtMidnight = new Date(todayAtMidnight);
   tomorrowAtMidnight.setDate(todayAtMidnight.getDate() + 1);
 
-  const totalWind = await getDataSet({
-    datasetId: 268,
-    searchParams: new URLSearchParams("sortBy=startTime"),
-    revalidate: 60 * 60 * 24,
-  });
+  // const response = await fingridFetch(
+  //   `/datasets/181/data?startTime=${todayAtMidnight.toISOString()}&endTime=${tomorrowAtMidnight.toISOString()}`,
+  // );
 
-  const maxWindCapacity = totalWind?.data.at(0)?.value ?? 7200;
+  // if (!response.ok) {
+  //   logger.error(response.statusText, "Failed to fetch data");
+  //   return <div>Failed to fetch data</div>;
+  // }
 
-  const currentWind = await getDataSet({
-    datasetId: 181,
-    searchParams: new URLSearchParams("sortBy=startTime"),
-    revalidate: 60 * 3,
-  });
+  // const parsed = await response.json();
+  // // logger.info(parsed, "Data fethced");
 
-  const currentWindCapacity = currentWind?.data.at(0)?.value ?? 0;
-
-  logger.info({ currentWindCapacity, maxWindCapacity }, "Wind capacity");
-
-  const response = await fingridFetch(
-    `/datasets/181/data?startTime=${todayAtMidnight.toISOString()}&endTime=${tomorrowAtMidnight.toISOString()}`,
-  );
-
-  if (!response.ok) {
-    logger.error(response.statusText, "Failed to fetch data");
-    return <div>Failed to fetch data</div>;
-  }
-
-  const parsed = await response.json();
-  // logger.info(parsed, "Data fethced");
-
-  const data = dataSetModel.parse(parsed);
+  // const data = dataSetModel.parse(parsed);
 
   return (
     <div>
       {todayAtMidnight.toLocaleString("fi")}
-      <div>
+      {/* <div>
         {data.data.map((item) => (
           <div key={item.startTime.toISOString()}>
             <p>{item.value}</p>
           </div>
         ))}
-      </div>
+      </div> */}
       <RefreshButton />
-      <Card className="bg-background max-w-sm">
-        <CardHeader>
-          <CardTitle>{currentWindCapacity} MW</CardTitle>
-          <CardDescription>Reaaliaikainen tuulisähkön tuotanto</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Progress value={(currentWindCapacity / maxWindCapacity) * 100} />
-        </CardContent>
-        <CardFooter>
-          Maksimikapasiteetti - {Math.round(maxWindCapacity / 100) * 100} MW
-        </CardFooter>
-      </Card>
+      <div className="grid grid-cols-3 gap-4">
+        <RealtimeDataCard current="windProduction" outOf="windCapacity" />
+        <RealtimeDataCard current="solarProduction" outOf="solarCapacity" />
+        <RealtimeDataCard current="totalProduction" outOf="totalConsumption" />
+        <RealtimeDataCard current="nuclearProduction" outOf={4394} />
+        <RealtimeDataCard current="hydroProduction" outOf={3190} />
+        <RealtimeDataCard current="industryProduction" outOf={2000} />
+        <SingleDataCard dataset="importExport" />
+        <SingleDataCard dataset="totalProduction" />
+        <SingleDataCard dataset="totalConsumption" />
+        <RealtimeDataCard current="reserveProduction" outOf={1000} />
+      </div>
     </div>
   );
 }

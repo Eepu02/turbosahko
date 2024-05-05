@@ -12,6 +12,10 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     FINGRID_API_KEY: z.string().min(1),
+    KV_URL: z.string().min(1),
+    KV_REST_API_URL: z.string().min(1),
+    KV_REST_API_TOKEN: z.string().min(1),
+    KV_REST_API_READ_ONLY_TOKEN: z.string().min(1),
   },
 
   /**
@@ -31,6 +35,10 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     FINGRID_API_KEY: process.env.FINGRID_API_KEY,
+    KV_URL: process.env.KV_URL,
+    KV_REST_API_URL: process.env.KV_REST_API_URL,
+    KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN,
+    KV_REST_API_READ_ONLY_TOKEN: process.env.KV_REST_API_READ_ONLY_TOKEN,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
