@@ -1,3 +1,5 @@
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-switcher";
 import "@/styles/globals.css";
 import { fingridFetch } from "@/utils/fetch";
 
@@ -23,9 +25,19 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <header>Turbosähkö</header>
-        <main>{children}</main>
-        <footer>{health.ok ? <p>API is up!</p> : <p>API is down!</p>}</footer>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <header>
+            <p>Turbosähkö</p>
+            <ThemeToggle />
+          </header>
+          <main>{children}</main>
+          <footer>{health.ok ? <p>API is up!</p> : <p>API is down!</p>}</footer>
+        </ThemeProvider>
       </body>
     </html>
   );

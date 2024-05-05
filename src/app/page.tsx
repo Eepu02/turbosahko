@@ -1,3 +1,5 @@
+import { RefreshButton } from "@/components/refresh-button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -6,8 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
-import { fingridFetch } from "@/utils/fetch";
+import { fingridFetch, getDataSet } from "@/utils/fetch";
 import { logger } from "@/utils/logger";
 import { dataSetModel } from "@/utils/validate";
 
@@ -20,8 +23,26 @@ export default async function HomePage() {
   const tomorrowAtMidnight = new Date(todayAtMidnight);
   tomorrowAtMidnight.setDate(todayAtMidnight.getDate() + 1);
 
+  const totalWind = await getDataSet({
+    datasetId: 268,
+    searchParams: new URLSearchParams("sortBy=startTime"),
+    revalidate: 60 * 60 * 24,
+  });
+
+  const maxWindCapacity = totalWind?.data.at(0)?.value ?? 7200;
+
+  const currentWind = await getDataSet({
+    datasetId: 181,
+    searchParams: new URLSearchParams("sortBy=startTime"),
+    revalidate: 60 * 3,
+  });
+
+  const currentWindCapacity = currentWind?.data.at(0)?.value ?? 0;
+
+  logger.info({ currentWindCapacity, maxWindCapacity }, "Wind capacity");
+
   const response = await fingridFetch(
-    `/datasets/75/data?startTime=${todayAtMidnight.toISOString()}&endTime=${tomorrowAtMidnight.toISOString()}`,
+    `/datasets/181/data?startTime=${todayAtMidnight.toISOString()}&endTime=${tomorrowAtMidnight.toISOString()}`,
   );
 
   if (!response.ok) {
@@ -30,7 +51,7 @@ export default async function HomePage() {
   }
 
   const parsed = await response.json();
-  logger.info(parsed, "Data fethced");
+  // logger.info(parsed, "Data fethced");
 
   const data = dataSetModel.parse(parsed);
 
@@ -44,12 +65,18 @@ export default async function HomePage() {
           </div>
         ))}
       </div>
-      <Card>
+      <RefreshButton />
+      <Card className="bg-background max-w-sm">
         <CardHeader>
-          <CardTitle>Tuulisähkö</CardTitle>
+          <CardTitle>{currentWindCapacity} MW</CardTitle>
           <CardDescription>Reaaliaikainen tuulisähkön tuotanto</CardDescription>
         </CardHeader>
-        <CardContent>Hello world</CardContent>
+        <CardContent>
+          <Progress value={(currentWindCapacity / maxWindCapacity) * 100} />
+        </CardContent>
+        <CardFooter>
+          Maksimikapasiteetti - {Math.round(maxWindCapacity / 100) * 100} MW
+        </CardFooter>
       </Card>
     </div>
   );

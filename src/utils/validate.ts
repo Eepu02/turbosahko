@@ -20,3 +20,5 @@ export const dataSetModel = z.object({
     to: z.number(),
   }),
 });
+
+export type DataSet = z.infer<typeof dataSetModel>;
