@@ -52,7 +52,7 @@ export const RealtimeDataCard = async ({
           <Header
             title={datasets[current].name}
             Icon={IconComponent}
-            isLive={datasets[current].revalidate < 60 * 15}
+            isLive={datasets[current].revalidate <= 60 * 15}
             description={datasets[current].description}
           />
         </CardTitle>
@@ -65,7 +65,8 @@ export const RealtimeDataCard = async ({
         )}
       </CardContent>
       <CardFooter>
-        Maksimikapasiteetti - {Math.round(maxCapacity / 100) * 100} MW
+        Maksimikapasiteetti - {Math.round(maxCapacity / 100) * 100}{" "}
+        {datasets[current].unit}
       </CardFooter>
     </Card>
   );

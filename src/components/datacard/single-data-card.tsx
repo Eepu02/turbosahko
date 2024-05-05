@@ -29,7 +29,7 @@ export const SingleDataCard = async ({ dataset }: { dataset: Datasets }) => {
           <Header
             title={data.name}
             Icon={IconComponent}
-            isLive={data.revalidate < 60 * 15}
+            isLive={data.revalidate <= 60 * 15}
             description={data.description}
           />
         </CardTitle>
@@ -37,7 +37,7 @@ export const SingleDataCard = async ({ dataset }: { dataset: Datasets }) => {
       <CardContent>
         {result.success ? (
           <p className="text-4xl font-bold">
-            {Math.round(result.data.data.at(0)?.value ?? 0)} MW
+            {Math.round(result.data.data.at(0)?.value ?? 0)} {data.unit}
           </p>
         ) : (
           <Skeleton />
