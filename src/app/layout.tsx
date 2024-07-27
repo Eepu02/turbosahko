@@ -31,8 +31,8 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <header>
-            <p>Turbosähkö</p>
+          <header className="flex justify-between border-b px-4 py-2">
+            <span className="text-3xl font-bold">Turbosähkö</span>
             <ThemeToggle />
           </header>
           <main>{children}</main>
