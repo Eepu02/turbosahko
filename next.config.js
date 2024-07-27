@@ -5,6 +5,8 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  staticPageGenerationTimeout: 60 * 3, // 3 minutes
+};
 
 export default config;
