@@ -79,7 +79,7 @@ const getDataSet = async ({
   };
 };
 
-const datasetCache = kvCache<DataSet>("dataset", 60);
+const datasetCache = kvCache<DataSet>("dataset", 3);
 
 export const getCachedDataSet = async ({
   datasetId,
