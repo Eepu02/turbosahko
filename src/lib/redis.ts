@@ -32,6 +32,8 @@ export const redisClient = async () => {
         },
       },
     });
+    await redisClientInstance.connect();
+
     redisClientInstance.on("error", (error) =>
       logger.error({ error }, "Redis client error"),
     );

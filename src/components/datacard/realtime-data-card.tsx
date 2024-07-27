@@ -9,7 +9,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { datasets } from "@/datasets";
 import type { Datasets } from "@/datasets";
-import { getDataSet } from "@/utils/fetch";
+import { getCachedDataSet } from "@/utils/fetch";
 import { Badge } from "../ui/badge";
 import { Header } from "./header";
 
@@ -22,10 +22,10 @@ export const RealtimeDataCard = async ({
 }) => {
   const max =
     typeof outOf !== "number"
-      ? await getDataSet({
+      ? await getCachedDataSet({
           datasetId: datasets[outOf].id,
           searchParams: new URLSearchParams("sortBy=startTime"),
-          revalidate: datasets[outOf].revalidate,
+          // revalidate: datasets[outOf].revalidate,
         })
       : outOf;
 
@@ -36,10 +36,10 @@ export const RealtimeDataCard = async ({
         : 7200
       : max;
 
-  const now = await getDataSet({
+  const now = await getCachedDataSet({
     datasetId: datasets[current].id,
     searchParams: new URLSearchParams("sortBy=startTime"),
-    revalidate: datasets[current].revalidate,
+    // revalidate: datasets[current].revalidate,
   });
 
   const nowCapacity = now.success ? now.data.data.at(0)?.value ?? 0 : 0;

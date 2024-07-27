@@ -7,17 +7,17 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { getDataSet } from "@/utils/fetch";
+import { getCachedDataSet } from "@/utils/fetch";
 import { Skeleton } from "../ui/skeleton";
 import { Header } from "./header";
 
 export const SingleDataCard = async ({ dataset }: { dataset: Datasets }) => {
   const data = datasets[dataset];
 
-  const result = await getDataSet({
+  const result = await getCachedDataSet({
     datasetId: data.id,
     searchParams: new URLSearchParams("sortBy=startTime"),
-    revalidate: data.revalidate,
+    // revalidate: data.revalidate,
   });
 
   const IconComponent = data.icon;
