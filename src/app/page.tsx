@@ -1,55 +1,49 @@
 import { RealtimeDataCard } from "@/components/datacard/realtime-data-card";
 import { RefreshButton } from "@/components/refresh-button";
 import { SingleDataCard } from "@/components/datacard/single-data-card";
-import { fingridFetch } from "@/utils/fetch";
 import { logger } from "@/utils/logger";
-import { dataSetModel } from "@/utils/validate";
+import { CardWrapper } from "@/components/datacard/wrapper";
 
 export default async function HomePage() {
   logger.info("Rendering Home page");
 
-  const today = new Date();
-  const todayAtMidnight = new Date(today.setHours(0, 0, 0, 0));
-
-  const tomorrowAtMidnight = new Date(todayAtMidnight);
-  tomorrowAtMidnight.setDate(todayAtMidnight.getDate() + 1);
-
-  // const response = await fingridFetch(
-  //   `/datasets/181/data?startTime=${todayAtMidnight.toISOString()}&endTime=${tomorrowAtMidnight.toISOString()}`,
-  // );
-
-  // if (!response.ok) {
-  //   logger.error(response.statusText, "Failed to fetch data");
-  //   return <div>Failed to fetch data</div>;
-  // }
-
-  // const parsed = await response.json();
-  // // logger.info(parsed, "Data fethced");
-
-  // const data = dataSetModel.parse(parsed);
-
   return (
-    <div>
-      {todayAtMidnight.toLocaleString("fi")}
-      {/* <div>
-        {data.data.map((item) => (
-          <div key={item.startTime.toISOString()}>
-            <p>{item.value}</p>
-          </div>
-        ))}
-      </div> */}
+    <div className="space-y-8">
       <RefreshButton />
-      <div className="grid grid-cols-3 gap-4">
-        <RealtimeDataCard current="windProduction" outOf="windCapacity" />
-        <RealtimeDataCard current="solarProduction" outOf="solarCapacity" />
-        <RealtimeDataCard current="totalProduction" outOf="totalConsumption" />
-        <RealtimeDataCard current="nuclearProduction" outOf={4394} />
-        <RealtimeDataCard current="hydroProduction" outOf={3190} />
-        <RealtimeDataCard current="industryProduction" outOf={2000} />
-        <SingleDataCard dataset="importExport" />
-        <SingleDataCard dataset="totalProduction" />
-        <SingleDataCard dataset="totalConsumption" />
-        <RealtimeDataCard current="reserveProduction" outOf={1000} />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <CardWrapper>
+          <RealtimeDataCard current="windProduction" outOf="windCapacity" />
+        </CardWrapper>
+        <CardWrapper>
+          <RealtimeDataCard current="solarProduction" outOf="solarCapacity" />
+        </CardWrapper>
+        <CardWrapper>
+          <RealtimeDataCard
+            current="totalProduction"
+            outOf="totalConsumption"
+          />
+        </CardWrapper>
+        <CardWrapper>
+          <RealtimeDataCard current="nuclearProduction" outOf={4394} />
+        </CardWrapper>
+        <CardWrapper>
+          <RealtimeDataCard current="hydroProduction" outOf={3190} />
+        </CardWrapper>
+        <CardWrapper>
+          <RealtimeDataCard current="industryProduction" outOf={2000} />
+        </CardWrapper>
+        <CardWrapper>
+          <SingleDataCard dataset="importExport" />
+        </CardWrapper>
+        <CardWrapper>
+          <SingleDataCard dataset="totalProduction" />
+        </CardWrapper>
+        <CardWrapper>
+          <SingleDataCard dataset="totalConsumption" />
+        </CardWrapper>
+        <CardWrapper>
+          <RealtimeDataCard current="reserveProduction" outOf={1000} />
+        </CardWrapper>
       </div>
     </div>
   );

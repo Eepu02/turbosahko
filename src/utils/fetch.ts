@@ -2,26 +2,19 @@ import { env } from "@/env";
 import urlJoin from "url-join";
 import { logger } from "./logger";
 import { dataSetModel, type DataSet } from "./validate";
-import { getSleepTime, ratelimit } from "./ratelimit";
+import { ratelimit } from "./ratelimit";
 
 export const fingridFetch = async (url: string, revalidate = 60) => {
   const fetchUrl = urlJoin("https://data.fingrid.fi/api/", url);
 
-  //   const { success, reset } = await ratelimit().limit("fingrid-api");
-
-  //   if (!success) {
-  //     const sleepTime = getSleepTime(reset);
-  //     logger.warn({ sleepTime }, "Rate limit exceeded");
-  //     await new Promise((resolve) => setTimeout(resolve, sleepTime));
-  //     logger.info("Woke up from sleep");
-  //   }
+  // await ratelimit().blockUntilReady("fingrid-api", 60_000);
 
   const response = await fetch(fetchUrl, {
     headers: {
       "x-api-key": env.FINGRID_API_KEY,
     },
     next: {
-      revalidate,
+      revalidate: 60 * 3,
     },
   });
   response.ok

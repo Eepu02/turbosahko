@@ -1,30 +1,5 @@
 import { Ratelimit } from "@upstash/ratelimit";
-import type { RedisClientType } from "redis";
-import { createClient } from "redis";
-import { logger } from "./logger";
-import { env } from "@/env";
 import { kv } from "@vercel/kv";
-
-const GLOBAL_PREFIX =
-  `turbosahko-${process.env.VERCEL_GIT_COMMIT_REF}` || "turbosahko-local";
-
-let redisClientInstance: RedisClientType | undefined;
-let semaphore = false;
-
-export const redisClient = async () => {
-  if (!redisClientInstance && !semaphore) {
-    semaphore = true; // mark awaited constructor
-    redisClientInstance = createClient({
-      socket: {
-        tls: env.NODE_ENV === "production",
-      },
-    });
-    redisClientInstance.on("error", (error) =>
-      logger.error({ error }, "Redis client error"),
-    );
-  }
-  return redisClientInstance;
-};
 
 let ratelimitInstance: Ratelimit | undefined;
 
@@ -45,11 +20,4 @@ export const ratelimit = () => {
     });
   }
   return ratelimitInstance;
-};
-
-export const getSleepTime = (wakeUpDate: number) => {
-  const timeRemainingMillis = wakeUpDate - Date.now();
-  const sleepTimeMillis =
-    timeRemainingMillis + Math.random() * timeRemainingMillis;
-  return sleepTimeMillis;
 };

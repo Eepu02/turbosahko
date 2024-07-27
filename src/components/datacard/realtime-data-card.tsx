@@ -43,17 +43,21 @@ export const RealtimeDataCard = async ({
   });
 
   const nowCapacity = now.success ? now.data.data.at(0)?.value ?? 0 : 0;
-  const IconComponent = datasets[current].icon;
+
+  const dataset = datasets[current];
+
+  // Random delay
+  // await new Promise((resolve) => setTimeout(resolve, Math.random() * 3000));
 
   return (
     <Card className={!now.success ? "border-destructive" : ""}>
       <CardHeader>
         <CardTitle>
           <Header
-            title={datasets[current].name}
-            Icon={IconComponent}
-            isLive={datasets[current].revalidate <= 60 * 15}
-            description={datasets[current].description}
+            title={dataset.name}
+            Icon={dataset.icon}
+            isLive={dataset.revalidate <= 60 * 15}
+            description={dataset.description}
           />
         </CardTitle>
       </CardHeader>

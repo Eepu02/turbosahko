@@ -18,26 +18,26 @@ export const Header = ({
   description?: string;
 }) => {
   return (
-    <HoverCard>
-      <HoverCardTrigger>
-        <div className="flex flex-row gap-2">
-          <Icon className="mr-2 inline" />
-          <p>{title}</p>
-          {isLive && (
-            <Badge
-              variant={"outline"}
-              className="border-destructive text-destructive ml-auto"
-            >
-              Live
-            </Badge>
-          )}
-        </div>
-      </HoverCardTrigger>
-      {description && (
-        <HoverCardContent className="w-auto max-w-xl text-base font-normal leading-normal tracking-normal">
-          {description}
-        </HoverCardContent>
+    // <HoverCard>
+    //   <HoverCardTrigger>
+    <div className="flex flex-row items-start gap-2">
+      <Icon className="mr-2 inline" />
+      <p>{title}</p>
+      {isLive && (
+        <Badge
+          variant={"outline"}
+          className="ml-auto border-destructive text-destructive"
+        >
+          Live
+        </Badge>
       )}
-    </HoverCard>
+    </div>
+    //   </HoverCardTrigger>
+    //   {description && (
+    //     <HoverCardContent className="w-auto max-w-xl text-base font-normal leading-normal tracking-normal">
+    //       {description}
+    //     </HoverCardContent>
+    //   )}
+    // </HoverCard>
   );
 };

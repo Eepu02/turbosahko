@@ -35,7 +35,9 @@ export default async function RootLayout({
             <span className="text-3xl font-bold">Turbosähkö</span>
             <ThemeToggle />
           </header>
-          <main>{children}</main>
+          <main className="flex min-h-screen w-full items-center justify-center">
+            {children}
+          </main>
           <footer>{health.ok ? <p>API is up!</p> : <p>API is down!</p>}</footer>
         </ThemeProvider>
       </body>
