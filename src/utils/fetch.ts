@@ -8,7 +8,7 @@ import { kvCache } from "@/lib/cache";
 export const fingridFetch = async (url: string, revalidate = 60) => {
   const fetchUrl = urlJoin("https://data.fingrid.fi/api/", url);
 
-  await ratelimit().blockUntilReady("fingrid-api", 60_000);
+  await ratelimit().blockUntilReady("fingrid-api", 60_000 * 3);
 
   const response = await fetch(fetchUrl, {
     headers: {
